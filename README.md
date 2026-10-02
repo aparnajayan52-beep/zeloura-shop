@@ -1,37 +1,62 @@
-# Ekart — Django backend + React frontend (connected)
+# Zeloura — Full-Stack Skincare Shop
 
+A full-stack e-commerce app built during my internship: a **Django REST API** with a **React** storefront. Users can browse products, sign up, fill a cart, check out, and track their orders.
+
+**Live demo:** _coming soon_
+
+## Screenshots
+![Shop page](docs/shop.png)
+![Cart](docs/cart.png)
+![My orders](docs/orders.png)
+
+## Features
+- Product listing with search, product detail pages, and image upload
+- Sign up / login with token authentication
+- Shopping cart (saved in the browser) and checkout
+- Orders with status (pending / shipped / delivered), managed from the Django admin
+- Stock is reduced automatically on each order; an order that asks for more than the available stock is rejected
+- The server looks up prices itself, so a customer cannot change the price from the browser
+- Only a product's author (or an admin) can edit or delete it
+- 13 automated API tests
+
+## Tech stack
+- **Backend:** Python, Django, Django REST Framework, SQLite
+- **Frontend:** React, Vite, React Router, Axios
+- **Auth:** token authentication
+
+## Project structure
 ```
-ekart/
+zeloura-shop/
 ├── backend/    Django + Django REST Framework  -> http://localhost:8000
 └── frontend/   React + Vite                    -> http://localhost:5173
 ```
+## Run it locally (VS Code)
 
-## Run it (Windows PowerShell) — two windows, both stay open
-
-**Window 1 – backend**
+1. Open the project folder in VS Code (**File → Open Folder**).
+2. Open a terminal with **Terminal → New Terminal** and start the **backend**:
 ```powershell
 cd backend
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 python manage.py migrate
+python manage.py createsuperuser
 python manage.py runserver
 ```
-
-**Window 2 – frontend**
+3. Click the **+** in the terminal panel to open a second terminal and start the **frontend**:
 ```powershell
 cd frontend
 npm install
 npm run dev
 ```
-Open http://localhost:5173
+4. Open http://localhost:5173 in your browser.
 
-## First-time setup (2 minutes)
-Your 4 existing products have **price = 0** because the price column is new.
-Open http://localhost:8000/admin/ (log in as your superuser **Aparna**), go to *Products*, and set a price for each.
+Next time you only need `.venv\Scripts\Activate.ps1` and `python manage.py runserver` in the backend terminal, and `npm run dev` in the frontend terminal.
+
+The shop starts empty. Log in at http://localhost:8000/admin/ with the superuser you just created, or sign up on the site and use **Add product** to create products.
 
 ## How the two halves talk
-React (`frontend/src/api.js`) -> HTTP + JSON -> Django (`backend/api/`)
+React (`frontend/src/api.js`) → HTTP + JSON → Django (`backend/api/`)
 
 | What | Endpoint |
 |---|---|
@@ -43,7 +68,7 @@ React (`frontend/src/api.js`) -> HTTP + JSON -> Django (`backend/api/`)
 | Place order (login) | `POST /api/orders/` |
 | My orders (login) | `GET /api/orders/` |
 
-Login gives the browser a **token**; `api.js` attaches it to every request automatically.
+Login gives the browser a token, and `api.js` attaches it to every request automatically.
 
 ## Tests
 ```powershell
@@ -51,11 +76,8 @@ cd backend
 python manage.py test
 ```
 
-## Your original Django-template pages still work
-http://localhost:8000/ (the old server-rendered shop) — with the bugs fixed.
-
-## Still to do (ideas for later)
-- Payment gateway (Razorpay/Stripe) — checkout currently places the order as "pending"
-- Edit-product page in React (API already supports `PATCH /api/products/<slug>/`)
-- Product categories, reviews, pagination
-- Deployment: set `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=0`, `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` as environment variables; use PostgreSQL; build the frontend with `npm run build`
+## Roadmap
+- Deployment
+- Payment gateway (Razorpay / Stripe)
+- Edit-product page in React (the API already supports it)
+- Categories, reviews, pagination
