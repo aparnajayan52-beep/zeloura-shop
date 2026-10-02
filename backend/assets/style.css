@@ -1,0 +1,12 @@
+body {
+    background-color: antiquewhite;
+    background-image: url("/static/back1.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+h1 {
+    font-style: italic;
+    text-align: left;
+
+}

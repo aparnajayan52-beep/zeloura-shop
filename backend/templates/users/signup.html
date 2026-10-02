@@ -1,0 +1,12 @@
+{% extends "base_layout.html" %}
+{% block content %}
+<h1>User Signup</h1>
+
+{# FIX: this form used to post to product:create, so signup never worked #}
+<form action="{% url 'user:signup' %}" method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+    <input type="submit" value="Signup">
+</form>
+{% endblock %}

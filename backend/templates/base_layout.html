@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekart</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+    <header>
+        <a href="{% url 'product:list' %}">
+            <img src="{% static 'logo1.jpg' %}" height="50" width="50">
+        </a>
+
+        <nav>
+            <ul>
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'product:create' %}" class="highlight">New Product</a>
+                </li>
+                <li>
+                    <form action="{% url 'user:logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                </li>
+                {% else %}
+                <li><a href="{% url 'user:login' %}">Login</a></li>
+                <li><a href="{% url 'user:signup' %}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+
+</html>

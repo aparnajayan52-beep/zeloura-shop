@@ -1,0 +1,10 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+<h2>Create Product</h2>
+<form action="{% url 'product:create' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ forms.as_p }}
+    <input type="submit" value="Create">
+</form>
+{# FIX: the </form> tag was missing #}
+{% endblock %}

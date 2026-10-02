@@ -1,0 +1,33 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+
+<h1>Our Best Sellers</h1>
+
+<div class="products">
+
+    {% for product in products %}
+
+    <div class="product">
+        <a href="{% url 'product:detail' slug=product.slug %}">
+            <img src="{{ product.image.url }}" height="150" width="150" alt="{{ product.title }}">
+        </a>
+        <h2>
+            <a href="{% url 'product:detail' slug=product.slug %}">
+                {{ product.title }}
+            </a>
+        </h2>
+
+        <p>{{ product.snippet }}</p>
+
+        <p><strong>₹{{ product.price }}</strong></p>
+
+    </div>
+
+    {% empty %}
+    <p>No products yet.</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
