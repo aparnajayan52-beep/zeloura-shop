@@ -6,7 +6,7 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
 
 from product.models import Product, Order
-from .permissions import IsAuthorOrReadOnly
+from .permissions import IsAuthorOrReadOnly, IsStaffOrReadOnly
 from .serializers import (ProductSerializer, OrderSerializer,
                           RegisterSerializer, UserSerializer)
 
@@ -59,7 +59,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     lookup_field = 'slug'
     parser_classes = [MultiPartParser, FormParser, JSONParser]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    permission_classes = [IsStaffOrReadOnly, IsAuthorOrReadOnly]
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'text']
 

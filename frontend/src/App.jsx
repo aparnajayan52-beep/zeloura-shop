@@ -27,7 +27,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           {/* "new" must be listed before ":slug" so it isn't treated as a product slug */}
-          <Route path="/products/new" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
+          <Route path="/products/new" element={<ProtectedRoute staffOnly><AddProduct /></ProtectedRoute>} />
           <Route path="/products/:slug" element={<ProductDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

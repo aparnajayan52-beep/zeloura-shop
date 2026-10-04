@@ -18,7 +18,7 @@ def fake_image(name="p.png"):
 @override_settings(MEDIA_ROOT="/tmp/ekart_test_media")
 class EkartApiTests(APITestCase):
     def setUp(self):
-        self.owner = User.objects.create_user("owner", password="StrongPass#123")
+        self.owner = User.objects.create_user("owner", password="StrongPass#123", is_staff=True)
         self.other = User.objects.create_user("other", password="StrongPass#123")
         self.p = Product.objects.create(slug="serum", title="Serum", text="x" * 100,
                                         price="500.00", stock=5, image="products/x.png",
@@ -105,3 +105,7 @@ class EkartApiTests(APITestCase):
         self.client.post("/api/orders/", self.order_payload(qty=1), format="json")
         self.login("owner")
         self.assertEqual(len(self.client.get("/api/orders/").data), 0)
+    def test_customer_cannot_create_product(self):
+        self.login("other")
+        r = self.client.post("/api/products/", {"title": "A", "text": "b", "price": "10", "image": fake_image()},format="multipart")
+        self.assertEqual(r.status_code, 403)

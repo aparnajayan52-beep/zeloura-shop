@@ -1,3 +1,4 @@
+import re
 from decimal import Decimal
 
 from django.contrib.auth.models import User
@@ -85,6 +86,32 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['id', 'full_name', 'phone', 'address', 'status',
                   'total', 'created', 'items', 'cart']
         read_only_fields = ['id', 'status', 'total', 'created']
+
+    def validate_full_name(self, value):
+        value = " ".join(value.split())          # tidy extra spaces
+        if len(value) < 2 or sum(c.isalpha() for c in value) < 2:
+            raise serializers.ValidationError("Please enter your full name.")
+        if any(c.isdigit() for c in value):
+            raise serializers.ValidationError("Name cannot contain numbers.")
+        return value
+
+    def validate_phone(self, value):
+        # accept "98765 43210", "+91-98765-43210", "098765 43210" -> store as 9876543210
+        digits = re.sub(r"[\s\-()]", "", value)
+        digits = re.sub(r"^(\+91|91|0)(?=\d{10}$)", "", digits)
+        if not re.fullmatch(r"[6-9]\d{9}", digits):
+            raise serializers.ValidationError(
+                "Enter a valid 10-digit Indian mobile number (starts with 6, 7, 8 or 9).")
+        return digits
+
+    def validate_address(self, value):
+        value = value.strip()
+        if len(value) < 10:
+            raise serializers.ValidationError(
+                "Please enter your full delivery address (house, street, area, city).")
+        if sum(c.isalpha() for c in value) < 5:
+            raise serializers.ValidationError("That doesn't look like an address.")
+        return value
 
     def validate_cart(self, value):
         if not value:

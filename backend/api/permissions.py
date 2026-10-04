@@ -8,3 +8,10 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         return obj.author_id == request.user.id or request.user.is_staff
+class IsStaffOrReadOnly(permissions.BasePermission):
+    """Anyone can browse. Only staff (shop admins) can add products."""
+
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return bool(request.user and request.user.is_staff)

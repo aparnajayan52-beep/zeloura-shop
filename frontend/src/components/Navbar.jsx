@@ -22,7 +22,7 @@ export default function Navbar() {
         <NavLink to="/">Shop</NavLink>
         {user ? (
           <>
-            <NavLink to="/products/new">Add product</NavLink>
+            {user.is_staff && <NavLink to="/products/new">Add product</NavLink>}
             <NavLink to="/orders">My orders</NavLink>
             <span className="muted hello">Hi, {user.username}</span>
             <button className="link-btn" onClick={handleLogout}>Logout</button>
